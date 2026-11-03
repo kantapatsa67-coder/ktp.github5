@@ -1,45 +1,102 @@
-[gemini-code-1793697338527.txt](https://github.com/user-attachments/files/34311322/gemini-code-1793697338527.txt)# ktp.github5
-[ktp.md](https://github.com/user-attachments/files/34311265/ktp.md)
-# 🎓 EduMind AI — Personalized Learning & Study Planner
-> นวัตกรรมระบบวิเคราะห์สไตล์การเรียนรู้และวางแผนการศึกษาเฉพาะบุคคลด้วยปัญญาประดิษฐ์
+⚡ Cyber Quest 2D: Unlimited Hardware Farming & Forge Edition
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
-[![Framework](https://img.shields.io/badge/Framework-FastAPI%20%7C%20React-green.svg)]()
+Cyber Quest 2D คือเกม RPG เพื่อการศึกษาเรื่องระบบและอุปกรณ์คอมพิวเตอร์ (Computer Hardware & Architecture) บนเว็บเบราว์เซอร์ในรูปแบบ Single-File Web Application (HTML5 Canvas + Web Audio API) รองรับการฟาร์มมอนสเตอร์แบบ Infinite ไม่จำกัดด่าน พร้อมระบบตีบวกไอเท็ม คลังคำถามสร้างแบบสุ่มไดนามิก และระบบสุ่มดรอปไอเท็มที่มีความละเอียดสูง
+🎯 จุดเด่นและฟีเจอร์หลัก (Key Features)
 
-## 📌 ที่มาและความสำคัญ (Problem Statement)
-ผู้เรียนแต่ละคนมีจังหวะ ความถนัด และสไตล์การเรียนรู้ (Learning Styles) ที่แตกต่างกัน แต่ระบบการเรียนส่วนใหญ่มักเป็นรูปแบบเดียวสำหรับทุกคน (One-Size-Fits-All) ส่งผลให้เกิดปัญหาตามเนื้อหาไม่ทันหรือขาดแรงจูงใจ **EduMind AI** จึงถูกพัฒนาขึ้นเพื่อวิเคราะห์ความเข้าใจของผู้เรียนแบบ Real-time และปรับแผนการเรียนย่อย (Micro-learning) ให้เหมาะกับแต่ละบุคคลโดยเฉพาะ
+1. 🚶‍♂️ ตัวละครมนุษย์ & สายอาชีพ (Human Character Customization)
 
-## ✨ ฟีเจอร์เด่น (Key Features)
-* **🧠 Diagnostic Assessment:** ระบบแบบทดสอบประเมินจุดแข็ง-จุดอ่อนลึกถึงระดับมโนทัศน์ (Concept-level)
-* **📅 Dynamic Study Roadmap:** สร้างและปรับตารางทบทวนบทเรียนให้อัตโนมัติตามเวลาว่างจริงของผู้เรียน
-* **🎯 Gamified Progress Tracker:** ระบบสะสมเหรียญรางวัล (Badges) [gemini-code-1793697336009.sh](https://github.com/user-attachments/files/34311318/gemini-code-1793697336009.sh)
-และบันทึกการเรียนต่อเนื่อง (Streak)
-* **📊 Instructor Insight Dashboard:** แดชบอร์ดสรุปภาพรวมสำหรับผู้สอน เพื่อดูจุดที่นักเรียนต้องการการซัพพอร์ตเพิ่มเติม
+ปรับแต่งตัวละคร: เลือกเพศมนุษย์ (ชาย / หญิง) ปรับสีผม และสีเสื้อผ้าตามต้องการ
 
-## 🛠️ เทคโนโลยีที่ใช้ (Tech Stack)
-* **Frontend:** React.js, Tailwind CSS, Chart.js
-* **Backend:** Python (FastAPI)
-* **Database:** PostgreSQL / Redis
-* **AI Engine:** Scikit-Learn (Pattern Analysis), OpenAI API
+3 สายอาชีพหลัก:
 
-## 🚀 การติดตั้งและเริ่มต้นใช้งาน (Getting Started)
-[Uploading gemini-code-17936973[gemini-code-1793697338527.txt](https://github.com/user-attachments/files/34311335/gemini-code-1793697338527.txt)38527.txt…]()
-### 1. Clone RepositoryEduMind-AI/
-├── backend/            # API Server & AI Models
-├── frontend/           # Web User Interface
-├── docs/               # Project Documents & Research
-├── README.md           # Documentation
-└── requirements.txt    # Dependencies
-```bash
-git clone [https://github.com/your-username/EduMind-AI.git](https://github.com/your-username/EduMind-AI.git)
-cd EduMind-AI
-🎯 แผนการพัฒนาในอนาคต (Roadmap)
-[ ] เพิ่มระบบ AI Voice Mentor ตอบคำถามด้วยเสียงเรียลไทม์
+Tech Knight: เน้นพลังป้องกัน (DEF +15, HP +50)
 
-[ ] รองรับการเชื่อมต่อกับ Google Classroom และ Canvas LMS
+Overclock Wizard: เน้นพลังโจมตี (ATK +25)
 
-[ ] พัฒนาแอปพลิเคชันบนสมาร์ตโฟน (iOS / Android)
+Net Ranger: เน้นความเร็วในการเคลื่อนที่ (Speed +25%)
 
-👥 ผู้จัดทำ (Contributors)
-[ktp] - Developer & Project Owner
+2. 🎮 ระบบเดิน 2D World & ปุ่มควบคุมแบบยืดหยุ่น (2D World & Controls)
+
+Engine 60 FPS: ขับเคลื่อนด้วย HTML5 Canvas ลื่นไหล ไม่หน่วง
+
+ระบบปุ่มควบคุม:
+
+แป้นพิมพ์: รองรับ WASD, Arrow Keys รวมถึงผูกปุ่มภาษาไทยอัตโนมัติ (ไ, ฟ, ห, ก)
+
+ปุ่มโต้ตอบ: กด E, Spacebar หรือ ำ เพื่อคุยกับ NPC หรือสู้กับมอนสเตอร์
+
+On-Screen D-Pad: ปุ่มทัชสกรีน/คลิกบนหน้าจอ สำหรับอุปกรณ์มือถือและแท็บเล็ต
+
+3. 🧠 ระบบคำถามคอมพิวเตอร์แบบไม่จำกัด (Procedural Unlimited Hardware Q&A)
+
+สร้างคำถามสเปกและสถาปัตยกรรมคอมพิวเตอร์แบบสุ่มตัวเลขและโจทย์ไม่ซ้ำกัน เช่น:
+
+RAM: การคำนวณ Bandwidth ของ DDR4 / DDR5
+
+CPU: การคำนวณ Cores / Threads ในสถาปัตยกรรม Hybrid (P-Cores + E-Cores)
+
+NVMe SSD: ความเร็วอ่าน/เขียนของ PCIe 3.0 / 4.0 / 5.0
+
+PSU: การเลือกขนาด Power Supply ให้สอดคล้องกับ Peak Load และ 80+ Efficiency
+
+GPU: หน้าที่และการทำงานของ VRAM GDDR6X
+
+Cooling & Interface: ชุดน้ำปิด AIO, พอร์ต HDMI 2.1 / DisplayPort 2.1
+
+คำอธิบายเฉลยละเอียดภาษาไทยทุกข้อเมื่อทำการ Counter Attack
+
+4. 💎 อัตราสุ่มดรอปไอเท็มแบบจุใจ (Micro Drop Rates: 0.00000001% - 100%)
+
+สุ่มดรอปอุปกรณ์ 5 ช่องสวมใส่ (Weapon, Helmet, Armor, Boots, Accessory)
+
+แบ่งระดับความแรร์ 6 Tier:
+
+Common (100%)
+
+Uncommon (30%)
+
+Rare (5.0%)
+
+Epic (0.5%)
+
+Legendary (0.01%)
+
+Mythic / Godlike (0.00000001% หรือ 1 ใน 100 ล้าน!)
+
+5. 🔨 โรงตีบวกอุปกรณ์อัตรา 70% (70% Forge & Upgrade System)
+
+นำอุปกรณ์มาอัปเกรดระดับ +1, +2, ... +10
+
+โอกาสสำเร็จคงที่ 70% / ล้มเหลว 30% (ไอเท็มไม่หาย แต่เสียทองและค่าธรรมเนียม)
+
+เพิ่มค่าพลังอุปกรณ์ +25% ต่อระดับ
+
+6. 🎁 ระบบรางวัลเข้าเล่นรายวัน (Daily Login Reward)
+
+บันทึกการรับรางวัลลง localStorage (รับได้วันละ 1 ครั้งเท่านั้น)
+
+มอบ 500 Gold, 50 Gems และกล่องสุ่มไอเท็ม Rare
+
+7. 🔊 Web Audio API Sound Synthesizer
+
+เสียงเอฟเฟกต์เดิน, เสียงฟันดาบ, เสียง Counter Parry, เสียงตีบวกสำเร็จ/ล้มเหลว และเสียงดรอปไอเท็มแรร์ สร้างจากคอร์เนทีฟ Web Audio API โดยไม่ต้องพึ่งไฟล์เสียงภายนอก
+🕹️ ปุ่มควบคุม (Controls Summary)แอ็กชันปุ่มบนแป้นพิมพ์ (ENG)ปุ่มบนแป้นพิมพ์ (THAI)Touch / Mouseเดินขึ้น (Up)W / Up ArrowไD-Pad บนหน้าจอเดินลง (Down)S / Down ArrowหD-Pad บนหน้าจอเดินซ้าย (Left)A / Left ArrowฟD-Pad บนหน้าจอเดินขวา (Right)D / Right ArrowกD-Pad บนหน้าจอโต้ตอบ / สู้ (Interact)E / Spacebarำปุ่ม [E] บนหน้าจอ / คลิกตัวละคร
+🛠️ เทคโนโลยีที่ใช้ (Tech Stack)
+
+HTML5 Canvas: เรนเดอร์ฉาก 2D World Map และ Sprite อวาตาร์ตัวละคร
+
+Tailwind CSS (CDN): จัดการสไตล์ UI และ Modal หน้าต่างเกม
+
+Vanilla JavaScript (ES6+): ตัวขับเคลื่อน Game Loop, Procedural Question Engine และ State Management
+
+Web Audio API: สังเคราะห์เสียง SFX ในตัว
+
+FontAwesome & Google Fonts (Kanit & Share Tech Mono): แสดงผลไอคอนและแบบอักษรธีมไซเบอร์
+
+🚀 วิธีเปิดใช้งาน (Getting Started)
+
+ดาวน์โหลดไฟล์ index.html
+
+ดับเบิลคลิกเปิดไฟล์ด้วยเว็บเบราว์เซอร์มาตรฐาน เช่น Google Chrome, Microsoft Edge, Safari หรือ Firefox
+
+ไม่จำเป็นต้องติดตั้ง Node.js, Web Server หรือ Dependency ใดๆ เพิ่มเติม!
