@@ -1,0 +1,1712 @@
+<!DOCTYPE html>
+<html lang="th" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Quest 2D: Unlimited Hardware Farming & Forge Edition</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Kanit', 'sans-serif'],
+                        mono: ['"Share Tech Mono"', 'monospace'],
+                    },
+                    colors: {
+                        cyber: {
+                            bg: '#030712',
+                            card: '#0b1329',
+                            border: '#1e293b',
+                            cyan: '#06b6d4',
+                            pink: '#ec4899',
+                            yellow: '#eab308',
+                            green: '#10b981',
+                            red: '#ef4444',
+                            purple: '#a855f7'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #030712;
+            color: #f8fafc;
+            user-select: none;
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        /* Fast Lightweight Rarity Styling */
+        .rarity-common { border-color: #6b7280; color: #f3f4f6; }
+        .rarity-uncommon { border-color: #22c55e; color: #4ade80; }
+        .rarity-rare { border-color: #3b82f6; color: #60a5fa; }
+        .rarity-epic { border-color: #a855f7; color: #c084fc; }
+        .rarity-legendary { border-color: #eab308; color: #fde047; }
+        .rarity-mythic { 
+            border-color: #ef4444; 
+            color: #fca5a5; 
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(234, 179, 8, 0.25)); 
+        }
+
+        .bg-rarity-common { background: rgba(107, 114, 128, 0.2); }
+        .bg-rarity-uncommon { background: rgba(34, 197, 94, 0.2); }
+        .bg-rarity-rare { background: rgba(59, 130, 246, 0.2); }
+        .bg-rarity-epic { background: rgba(168, 85, 247, 0.2); }
+        .bg-rarity-legendary { background: rgba(234, 179, 8, 0.2); }
+        .bg-rarity-mythic { background: linear-gradient(135deg, rgba(239, 68, 68, 0.35), rgba(234, 179, 8, 0.35)); }
+
+        /* Upgrade Sparkle Animation */
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(6, 182, 212, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(6, 182, 212, 0.9); }
+        }
+        .glow-active { animation: glowPulse 1.5s infinite; }
+
+        /* Screen Shake */
+        .shake-screen { animation: screenShake 0.25s ease-in-out; }
+        @keyframes screenShake {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(-6px, 4px); }
+            75% { transform: translate(6px, -4px); }
+        }
+
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: #030712; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+    </style>
+</head>
+<body id="app-body" class="w-screen h-screen flex flex-col font-sans bg-slate-950 relative overflow-hidden">
+
+    <!-- ================= 1. CHARACTER CREATION SCREEN ================= -->
+    <div id="screen-char-create" class="fixed inset-0 z-50 bg-slate-950 flex items-center justify-center p-4 overflow-y-auto">
+        <div class="max-w-2xl w-full bg-slate-900 border border-cyber-cyan/40 rounded-2xl p-6 shadow-2xl flex flex-col md:flex-row gap-6 my-auto">
+            
+            <!-- Avatar Preview -->
+            <div class="flex flex-col items-center justify-center bg-slate-950 p-4 rounded-xl border border-slate-800 md:w-1/2">
+                <span class="text-xs font-mono text-cyber-cyan font-bold mb-2 uppercase tracking-wider">ตัวอย่างอวาตาร์มนุษย์ (2D PREVIEW)</span>
+                <div class="relative w-40 h-40 bg-slate-900 rounded-xl border border-cyber-cyan/30 flex items-center justify-center overflow-hidden">
+                    <canvas id="canvas-preview" width="160" height="160" class="block"></canvas>
+                </div>
+                
+                <!-- Color Pickers -->
+                <div class="w-full mt-4 space-y-2.5">
+                    <div>
+                        <label class="block text-[10px] font-mono text-slate-400 mb-1">สีผม (HAIR COLOR):</label>
+                        <div class="flex justify-center gap-2">
+                            <button onclick="setPreviewColor('hair', '#3b82f6')" class="w-6 h-6 rounded-full bg-blue-500 border border-white focus:scale-110"></button>
+                            <button onclick="setPreviewColor('hair', '#eab308')" class="w-6 h-6 rounded-full bg-yellow-500 border border-transparent focus:scale-110"></button>
+                            <button onclick="setPreviewColor('hair', '#ec4899')" class="w-6 h-6 rounded-full bg-pink-500 border border-transparent focus:scale-110"></button>
+                            <button onclick="setPreviewColor('hair', '#10b981')" class="w-6 h-6 rounded-full bg-emerald-500 border border-transparent focus:scale-110"></button>
+                            <button onclick="setPreviewColor('hair', '#1e293b')" class="w-6 h-6 rounded-full bg-slate-800 border border-transparent focus:scale-110"></button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-mono text-slate-400 mb-1">สีเสื้อผ้า (SHIRT COLOR):</label>
+                        <div class="flex justify-center gap-2">
+                            <button onclick="setPreviewColor('shirt', '#06b6d4')" class="w-6 h-6 rounded-full bg-cyan-500 border border-white focus:scale-110"></button>
+                            <button onclick="setPreviewColor('shirt', '#ef4444')" class="w-6 h-6 rounded-full bg-red-500 border border-transparent focus:scale-110"></button>
+                            <button onclick="setPreviewColor('shirt', '#a855f7')" class="w-6 h-6 rounded-full bg-purple-500 border border-transparent focus:scale-110"></button>
+                            <button onclick="setPreviewColor('shirt', '#f97316')" class="w-6 h-6 rounded-full bg-orange-500 border border-transparent focus:scale-110"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form & Options -->
+            <div class="flex flex-col gap-4 md:w-1/2 justify-between">
+                <div>
+                    <div class="font-mono text-xs text-cyber-cyan tracking-widest uppercase">UNLIMITED HARDWARE FARMING & FORGE</div>
+                    <h1 class="text-xl font-bold text-yellow-400 tracking-wider mt-1">CYBER QUEST 2D</h1>
+                    <p class="text-xs text-slate-400 mt-0.5">ลื่นไหล 60 FPS | WASD เดิน / E โต้ตอบ | คำถามไม่จำกัด</p>
+                </div>
+
+                <!-- Name Input -->
+                <div>
+                    <label class="block text-xs font-mono text-slate-300 mb-1">ชื่อผู้เล่น (PLAYER NAME):</label>
+                    <input type="text" id="create-name" maxlength="12" value="HardwareHero" 
+                           class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-2 text-sm font-mono text-cyber-cyan focus:outline-none focus:border-cyber-cyan">
+                </div>
+
+                <!-- Gender Selection -->
+                <div>
+                    <label class="block text-xs font-mono text-slate-300 mb-1.5">เลือกเพศตัวละคร (GENDER):</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button type="button" onclick="selectGender('male')" id="gender-btn-male" 
+                                class="gender-btn active py-2.5 rounded-xl border bg-slate-950 flex items-center justify-center gap-2 border-cyber-cyan text-cyber-cyan font-bold text-xs transition-all">
+                            <i class="fa-solid fa-mars text-base"></i> ชาย (Male)
+                        </button>
+                        <button type="button" onclick="selectGender('female')" id="gender-btn-female" 
+                                class="gender-btn py-2.5 rounded-xl border bg-slate-950 flex items-center justify-center gap-2 border-slate-800 text-slate-400 font-bold text-xs transition-all">
+                            <i class="fa-solid fa-venus text-base"></i> หญิง (Female)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Class Selection -->
+                <div>
+                    <label class="block text-xs font-mono text-slate-300 mb-1.5">เลือกสายอาชีพ (CLASS):</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button type="button" onclick="selectClass('knight')" id="class-btn-knight" class="class-btn active p-2 rounded-xl border bg-slate-950 text-center border-cyber-cyan text-cyber-cyan transition-all">
+                            <i class="fa-solid fa-shield-halved text-sm"></i>
+                            <div class="text-[10px] font-bold font-mono mt-0.5">Tech Knight</div>
+                            <div class="text-[8px] text-slate-400">DEF +15</div>
+                        </button>
+                        <button type="button" onclick="selectClass('wizard')" id="class-btn-wizard" class="class-btn p-2 rounded-xl border bg-slate-950 text-center border-slate-800 text-slate-400 transition-all">
+                            <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+                            <div class="text-[10px] font-bold font-mono mt-0.5">Overclock Wizard</div>
+                            <div class="text-[8px] text-slate-400">ATK +25</div>
+                        </button>
+                        <button type="button" onclick="selectClass('ranger')" id="class-btn-ranger" class="class-btn p-2 rounded-xl border bg-slate-950 text-center border-slate-800 text-slate-400 transition-all">
+                            <i class="fa-solid fa-crosshair text-sm"></i>
+                            <div class="text-[10px] font-bold font-mono mt-0.5">Net Ranger</div>
+                            <div class="text-[8px] text-slate-400">Speed +25%</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Start Button -->
+                <button onclick="confirmCharacterCreation()" class="w-full py-3 bg-cyber-cyan hover:bg-cyan-400 text-slate-950 font-bold rounded-xl font-mono text-sm transition-all shadow-lg">
+                    <i class="fa-solid fa-play mr-1"></i> เข้าสู่โลกไซเบอร์ (WASD / E)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 2. HUD HEADER BAR ================= -->
+    <header id="main-hud" class="bg-slate-900/95 border-b border-slate-800 px-3 py-2 z-20 flex justify-between items-center backdrop-blur-sm">
+        <!-- Player Stats -->
+        <div class="flex items-center gap-3">
+            <div id="hud-gender-icon" class="w-9 h-9 rounded-lg bg-slate-950 border border-cyber-cyan flex items-center justify-center text-cyber-cyan text-base">
+                <i class="fa-solid fa-mars"></i>
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <span id="hud-name" class="font-bold text-xs sm:text-sm text-slate-100">HardwareHero</span>
+                    <span id="hud-class-badge" class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800">Tech Knight</span>
+                </div>
+                <div class="flex items-center gap-2 mt-0.5">
+                    <span class="text-[10px] font-mono text-yellow-400 font-bold">LV.<span id="hud-level">1</span></span>
+                    <!-- HP Bar -->
+                    <div class="w-20 sm:w-28 bg-slate-950 border border-slate-700 h-2.5 rounded-full overflow-hidden">
+                        <div id="hud-hp-bar" class="bg-red-500 h-full transition-all duration-200" style="width: 100%;"></div>
+                    </div>
+                    <span id="hud-hp-val" class="text-[9px] font-mono text-slate-300">150/150</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Location & Currencies -->
+        <div class="hidden lg:flex items-center gap-3 text-xs font-mono">
+            <div class="bg-slate-950 border border-slate-800 px-3 py-1 rounded-lg text-slate-300">
+                <i class="fa-solid fa-map-location-dot text-cyber-cyan mr-1"></i>
+                <span id="hud-map-name">Central Tech Town</span>
+            </div>
+            <div class="bg-slate-950 border border-slate-800 px-3 py-1 rounded-lg text-yellow-400 font-bold">
+                <i class="fa-solid fa-coins mr-1"></i> <span id="hud-gold">0</span> GOLD
+            </div>
+            <div class="bg-slate-950 border border-slate-800 px-3 py-1 rounded-lg text-cyan-400 font-bold">
+                <i class="fa-solid fa-gem mr-1"></i> <span id="hud-gems">0</span> GEMS
+            </div>
+        </div>
+
+        <!-- HUD Action Buttons -->
+        <div class="flex items-center gap-1.5 sm:gap-2">
+            <button onclick="openDailyLoginModal()" class="px-2.5 py-1.5 bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-400 border border-yellow-500/50 rounded-lg text-xs font-mono flex items-center gap-1">
+                <i class="fa-solid fa-calendar-check"></i>
+                <span class="hidden sm:inline">รางวัลรายวัน</span>
+            </button>
+            <button onclick="openForgeModal()" class="px-2.5 py-1.5 bg-purple-950 hover:bg-purple-900 text-purple-300 border border-purple-700 rounded-lg text-xs font-mono flex items-center gap-1">
+                <i class="fa-solid fa-hammer text-purple-400"></i>
+                <span class="hidden sm:inline">ตีบวก 70%</span>
+            </button>
+            <button onclick="openInventoryModal()" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-xs font-mono flex items-center gap-1">
+                <i class="fa-solid fa-briefcase text-yellow-400"></i>
+                <span class="hidden sm:inline">สัมภาระ (5 ช่อง)</span>
+            </button>
+            <button onclick="openRankingModal()" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-xs font-mono flex items-center gap-1">
+                <i class="fa-solid fa-trophy text-yellow-500"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- ================= 3. 2D CANVAS GAME WORLD ================= -->
+    <main class="flex-1 relative w-full h-full bg-slate-950 overflow-hidden">
+        <!-- Main Game Canvas -->
+        <canvas id="game-canvas" class="w-full h-full block bg-slate-950 cursor-pointer"></canvas>
+
+        <!-- Drop Banner -->
+        <div id="loot-drop-banner" class="absolute top-4 left-1/2 -translate-x-1/2 z-30 pointer-events-none hidden transition-all">
+            <div id="loot-drop-card" class="bg-slate-900 border-2 px-4 py-2 rounded-xl flex items-center gap-3 shadow-2xl">
+                <div id="loot-drop-icon-box" class="w-9 h-9 rounded-lg flex items-center justify-center text-lg">
+                    <i id="loot-drop-icon" class="fa-solid fa-cube"></i>
+                </div>
+                <div>
+                    <div id="loot-drop-rarity-text" class="text-[9px] font-mono font-bold tracking-widest uppercase">DROP!</div>
+                    <div id="loot-drop-name-text" class="text-xs font-bold text-white">Item Name</div>
+                    <div id="loot-drop-rate-text" class="text-[9px] font-mono text-yellow-400">อัตราดรอป: 0.00000001%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Interact Prompt -->
+        <div id="interact-prompt" class="absolute bottom-20 left-1/2 -translate-x-1/2 bg-slate-900/90 border border-cyber-cyan text-cyber-cyan px-4 py-2 rounded-xl text-xs font-mono shadow-lg flex items-center gap-2 pointer-events-none hidden">
+            <i class="fa-solid fa-keyboard text-yellow-400 text-sm"></i>
+            <span id="interact-prompt-text">กด [E] หรือ [Spacebar] หรือแตะ เพื่อโต้ตอบ</span>
+        </div>
+
+        <!-- On-Screen D-Pad Controls (Supports Mouse Click & Touch) -->
+        <div id="virtual-dpad" class="absolute bottom-5 left-5 grid grid-cols-3 gap-1 w-36 h-36 opacity-90 z-30 select-none">
+            <div></div>
+            <button onmousedown="handleDpadStart('up')" onmouseup="handleDpadEnd()" onmouseleave="handleDpadEnd()" ontouchstart="handleDpadStart('up')" ontouchend="handleDpadEnd()" class="bg-slate-900/90 text-cyber-cyan hover:bg-cyber-cyan hover:text-slate-950 rounded-lg flex items-center justify-center text-xl border border-cyber-cyan/50 shadow-lg active:scale-95 transition-all"><i class="fa-solid fa-caret-up"></i></button>
+            <div></div>
+            <button onmousedown="handleDpadStart('left')" onmouseup="handleDpadEnd()" onmouseleave="handleDpadEnd()" ontouchstart="handleDpadStart('left')" ontouchend="handleDpadEnd()" class="bg-slate-900/90 text-cyber-cyan hover:bg-cyber-cyan hover:text-slate-950 rounded-lg flex items-center justify-center text-xl border border-cyber-cyan/50 shadow-lg active:scale-95 transition-all"><i class="fa-solid fa-caret-left"></i></button>
+            <div class="bg-slate-950/80 rounded-lg border border-slate-800 flex items-center justify-center text-[8px] font-mono text-slate-500">WASD</div>
+            <button onmousedown="handleDpadStart('right')" onmouseup="handleDpadEnd()" onmouseleave="handleDpadEnd()" ontouchstart="handleDpadStart('right')" ontouchend="handleDpadEnd()" class="bg-slate-900/90 text-cyber-cyan hover:bg-cyber-cyan hover:text-slate-950 rounded-lg flex items-center justify-center text-xl border border-cyber-cyan/50 shadow-lg active:scale-95 transition-all"><i class="fa-solid fa-caret-right"></i></button>
+            <div></div>
+            <button onmousedown="handleDpadStart('down')" onmouseup="handleDpadEnd()" onmouseleave="handleDpadEnd()" ontouchstart="handleDpadStart('down')" ontouchend="handleDpadEnd()" class="bg-slate-900/90 text-cyber-cyan hover:bg-cyber-cyan hover:text-slate-950 rounded-lg flex items-center justify-center text-xl border border-cyber-cyan/50 shadow-lg active:scale-95 transition-all"><i class="fa-solid fa-caret-down"></i></button>
+            <div></div>
+        </div>
+
+        <!-- On-Screen Action Button [E] -->
+        <div class="absolute bottom-6 right-6 z-30 select-none">
+            <button onclick="triggerCurrentInteraction()" class="w-16 h-16 rounded-2xl bg-cyber-cyan text-slate-950 font-bold flex flex-col items-center justify-center text-lg shadow-xl border-2 border-white hover:bg-cyan-300 active:scale-95 transition-all">
+                <i class="fa-solid fa-hand-pointer text-base"></i>
+                <span class="text-[10px] font-mono font-extrabold mt-0.5">กด [E]</span>
+            </button>
+        </div>
+    </main>
+
+    <!-- ================= 4. MODAL: DAILY LOGIN REWARDS ================= -->
+    <div id="modal-daily-login" class="fixed inset-0 bg-black/80 z-40 flex items-center justify-center p-4 hidden">
+        <div class="max-w-md w-full bg-slate-900 border-2 border-yellow-500 rounded-2xl p-5 shadow-2xl flex flex-col gap-4">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="text-base font-bold text-yellow-400 flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-check"></i> รางวัลเข้าเล่นรายวัน (DAILY LOGIN REWARD)
+                </h3>
+                <button onclick="closeDailyLoginModal()" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-center flex flex-col items-center gap-3">
+                <div class="w-16 h-16 rounded-2xl bg-yellow-500/10 border-2 border-yellow-500 flex items-center justify-center text-yellow-400 text-3xl shadow-lg">
+                    <i class="fa-solid fa-gift"></i>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-slate-100">กล่องรางวัลฮาร์ดแวร์ประจำวัน (Daily Supply)</h4>
+                    <p class="text-xs text-slate-400 mt-1">กดรับของรางวัลฟรีวันละ 1 ครั้ง เพื่อรับทอง เพชร และไอเท็มแรร์สุ่ม!</p>
+                </div>
+                <div class="grid grid-cols-3 gap-2 w-full mt-1 font-mono text-xs">
+                    <div class="bg-slate-900 p-2 rounded-lg border border-slate-800 text-yellow-400 font-bold">+500 GOLD</div>
+                    <div class="bg-slate-900 p-2 rounded-lg border border-slate-800 text-cyan-400 font-bold">+50 GEMS</div>
+                    <div class="bg-slate-900 p-2 rounded-lg border border-slate-800 text-purple-400 font-bold">1x RARE GEAR</div>
+                </div>
+            </div>
+
+            <div id="daily-login-status-box">
+                <!-- Dynamic Button / Claim Status -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 5. MODAL: FORGE & UPGRADE TERMINAL (ตีบวก 70%) ================= -->
+    <div id="modal-forge" class="fixed inset-0 bg-black/85 z-40 flex items-center justify-center p-4 hidden">
+        <div class="max-w-2xl w-full bg-slate-900 border-2 border-purple-600 rounded-2xl p-5 shadow-2xl flex flex-col gap-4 max-h-[90vh]">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="text-base font-bold text-purple-400 flex items-center gap-2">
+                    <i class="fa-solid fa-hammer"></i> โรงตีบวกและสังเคราะห์อุปกรณ์ (FORGE TERMINAL - 70% RATE)
+                </h3>
+                <button onclick="closeForgeModal()" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Select Item List -->
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex flex-col gap-2">
+                    <span class="text-xs font-mono text-slate-400 font-bold border-b border-slate-800 pb-1">เลือกไอเท็มที่จะตีบวก:</span>
+                    <div id="forge-inventory-list" class="space-y-1.5 max-h-[250px] overflow-y-auto pr-1">
+                        <!-- Rendered via JS -->
+                    </div>
+                </div>
+
+                <!-- Forge Workbench -->
+                <div class="bg-slate-950 p-4 rounded-xl border border-purple-900/50 flex flex-col justify-between items-center text-center">
+                    <div id="forge-target-card" class="w-full flex flex-col items-center gap-2 py-4">
+                        <div class="w-16 h-16 rounded-2xl bg-slate-900 border-2 border-slate-700 flex items-center justify-center text-3xl text-slate-500">
+                            <i class="fa-solid fa-anvil"></i>
+                        </div>
+                        <span class="text-xs font-mono text-slate-400">ยังไม่ได้เลือกไอเท็ม</span>
+                    </div>
+
+                    <!-- Upgrade Info -->
+                    <div class="w-full bg-slate-900 p-3 rounded-xl border border-slate-800 text-xs font-mono space-y-1">
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">อัตราสำเร็จ (Success Rate):</span>
+                            <span class="text-green-400 font-bold">70.0%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">ค่าพลังเพิ่มขึ้น:</span>
+                            <span class="text-yellow-400 font-bold">+25% ต่อระดับ (+1)</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">ค่าธรรมเนียม:</span>
+                            <span id="forge-cost-text" class="text-cyan-400 font-bold">100 GOLD</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Button -->
+                    <button id="btn-execute-forge" disabled onclick="executeForgeUpgrade()" 
+                            class="w-full mt-3 py-3 bg-purple-600 hover:bg-purple-500 disabled:bg-slate-800 disabled:text-slate-600 text-white font-bold rounded-xl font-mono text-xs transition-all shadow-lg flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-bolt"></i> เริ่มการตีบวก (70% SUCCESS RATE)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 6. MODAL: INVENTORY & 5-SLOT EQUIPMENT ================= -->
+    <div id="modal-inventory" class="fixed inset-0 bg-black/80 z-40 flex items-center justify-center p-4 hidden">
+        <div class="max-w-3xl w-full bg-slate-900 border-2 border-slate-800 rounded-2xl p-5 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="text-base font-bold text-slate-100 flex items-center gap-2">
+                    <i class="fa-solid fa-shield-cat text-cyber-cyan"></i> สัมภาระและการสวมใส่ 5 ช่อง (EQUIPMENT & BACKPACK)
+                </h3>
+                <button onclick="closeInventoryModal()" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- 5 Equipped Slots -->
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex flex-col gap-2">
+                    <span class="text-xs font-mono text-slate-400 font-bold border-b border-slate-800 pb-1">อุปกรณ์ที่สวมใส่ (5 Slots):</span>
+
+                    <!-- Weapon -->
+                    <div id="slot-weapon" onclick="unequipSlot('weapon')" class="p-2 rounded-lg border bg-slate-900 border-slate-800 flex items-center gap-2 cursor-pointer hover:border-cyber-cyan">
+                        <div class="w-7 h-7 rounded bg-slate-950 border border-slate-700 flex items-center justify-center text-slate-400 text-xs"><i class="fa-solid fa-desktop"></i></div>
+                        <div class="text-xs flex-1">
+                            <div class="text-[8px] text-slate-500 uppercase">WEAPON (GPU/Tool)</div>
+                            <div id="slot-weapon-name" class="font-semibold text-slate-400 text-[10px] truncate">ว่างเปล่า</div>
+                        </div>
+                    </div>
+
+                    <!-- Helmet -->
+                    <div id="slot-helmet" onclick="unequipSlot('helmet')" class="p-2 rounded-lg border bg-slate-900 border-slate-800 flex items-center gap-2 cursor-pointer hover:border-cyber-cyan">
+                        <div class="w-7 h-7 rounded bg-slate-950 border border-slate-700 flex items-center justify-center text-slate-400 text-xs"><i class="fa-solid fa-microchip"></i></div>
+                        <div class="text-xs flex-1">
+                            <div class="text-[8px] text-slate-500 uppercase">HELMET (CPU/Cooler)</div>
+                            <div id="slot-helmet-name" class="font-semibold text-slate-400 text-[10px] truncate">ว่างเปล่า</div>
+                        </div>
+                    </div>
+
+                    <!-- Armor -->
+                    <div id="slot-armor" onclick="unequipSlot('armor')" class="p-2 rounded-lg border bg-slate-900 border-slate-800 flex items-center gap-2 cursor-pointer hover:border-cyber-cyan">
+                        <div class="w-7 h-7 rounded bg-slate-950 border border-slate-700 flex items-center justify-center text-slate-400 text-xs"><i class="fa-solid fa-plug"></i></div>
+                        <div class="text-xs flex-1">
+                            <div class="text-[8px] text-slate-500 uppercase">ARMOR (Chassis/PSU)</div>
+                            <div id="slot-armor-name" class="font-semibold text-slate-400 text-[10px] truncate">ว่างเปล่า</div>
+                        </div>
+                    </div>
+
+                    <!-- Boots -->
+                    <div id="slot-boots" onclick="unequipSlot('boots')" class="p-2 rounded-lg border bg-slate-900 border-slate-800 flex items-center gap-2 cursor-pointer hover:border-cyber-cyan">
+                        <div class="w-7 h-7 rounded bg-slate-950 border border-slate-700 flex items-center justify-center text-slate-400 text-xs"><i class="fa-solid fa-memory"></i></div>
+                        <div class="text-xs flex-1">
+                            <div class="text-[8px] text-slate-500 uppercase">BOOTS (RAM/Bus)</div>
+                            <div id="slot-boots-name" class="font-semibold text-slate-400 text-[10px] truncate">ว่างเปล่า</div>
+                        </div>
+                    </div>
+
+                    <!-- Accessory -->
+                    <div id="slot-accessory" onclick="unequipSlot('accessory')" class="p-2 rounded-lg border bg-slate-900 border-slate-800 flex items-center gap-2 cursor-pointer hover:border-cyber-cyan">
+                        <div class="w-7 h-7 rounded bg-slate-950 border border-slate-700 flex items-center justify-center text-slate-400 text-xs"><i class="fa-solid fa-hard-drive"></i></div>
+                        <div class="text-xs flex-1">
+                            <div class="text-[8px] text-slate-500 uppercase">ACCESSORY (SSD/Relic)</div>
+                            <div id="slot-accessory-name" class="font-semibold text-slate-400 text-[10px] truncate">ว่างเปล่า</div>
+                        </div>
+                    </div>
+
+                    <!-- Stats Summary -->
+                    <div class="mt-1 bg-slate-900 p-2 rounded-lg border border-slate-800 text-[10px] font-mono space-y-0.5">
+                        <div class="flex justify-between"><span>ATK:</span> <span id="stat-total-atk" class="text-cyber-cyan font-bold">15</span></div>
+                        <div class="flex justify-between"><span>DEF:</span> <span id="stat-total-def" class="text-emerald-400 font-bold">5</span></div>
+                        <div class="flex justify-between"><span>MAX HP:</span> <span id="stat-total-hp" class="text-red-400 font-bold">150</span></div>
+                        <div class="flex justify-between"><span>CRIT %:</span> <span id="stat-total-crit" class="text-yellow-400 font-bold">5%</span></div>
+                    </div>
+                </div>
+
+                <!-- Backpack Grid -->
+                <div class="md:col-span-2 bg-slate-950 p-3.5 rounded-xl border border-slate-800 flex flex-col gap-3">
+                    <span class="text-xs font-mono text-slate-400 font-bold border-b border-slate-800 pb-1">กระเป๋าสัมภาระ (Backpack Inventory):</span>
+                    <div id="inventory-grid" class="grid grid-cols-4 sm:grid-cols-5 gap-2 min-h-[200px] max-h-[260px] overflow-y-auto p-1">
+                        <!-- Rendered via JS -->
+                    </div>
+
+                    <!-- Selected Item Detail -->
+                    <div id="inventory-item-detail" class="bg-slate-900 border border-slate-800 p-3 rounded-xl hidden flex justify-between items-center gap-2">
+                        <div>
+                            <span id="inv-item-rarity" class="text-[9px] font-mono px-2 py-0.5 rounded font-bold uppercase">COMMON</span>
+                            <div id="inv-item-name" class="text-xs font-bold text-slate-100 mt-1">Item Name</div>
+                            <div id="inv-item-stats" class="text-[10px] text-slate-400">ATK +10</div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button id="btn-equip-item" class="px-3 py-1.5 bg-cyber-cyan text-slate-950 font-bold rounded-lg text-xs font-mono">สวมใส่/ถอด</button>
+                            <button id="btn-sell-item" class="px-3 py-1.5 bg-slate-800 text-yellow-400 border border-slate-700 font-bold rounded-lg text-xs font-mono">ขาย</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 7. MODAL: LEADERBOARD ================= -->
+    <div id="modal-ranking" class="fixed inset-0 bg-black/80 z-40 flex items-center justify-center p-4 hidden">
+        <div class="max-w-md w-full bg-slate-900 border-2 border-yellow-500 rounded-2xl p-5 shadow-2xl flex flex-col gap-4">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="text-base font-bold text-yellow-400 flex items-center gap-2">
+                    <i class="fa-solid fa-trophy"></i> LEADERBOARD TOP DEFENDERS
+                </h3>
+                <button onclick="closeRankingModal()" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div id="ranking-list" class="space-y-2 max-h-[300px] overflow-y-auto">
+                <!-- Rendered via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 8. MODAL: NPC DIALOG ================= -->
+    <div id="modal-npc-dialog" class="fixed inset-0 bg-black/80 z-40 flex items-center justify-center p-4 hidden">
+        <div class="max-w-lg w-full bg-slate-900 border-2 border-cyber-cyan rounded-2xl p-5 shadow-2xl flex flex-col gap-4">
+            <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                <div id="npc-avatar-box" class="w-12 h-12 rounded-xl bg-cyan-950 border border-cyber-cyan text-cyber-cyan flex items-center justify-center text-2xl">
+                    <i class="fa-solid fa-user-astronaut"></i>
+                </div>
+                <div>
+                    <h3 id="npc-dialog-title" class="text-base font-bold text-slate-100">Elder Hardware Master</h3>
+                    <span id="npc-dialog-role" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-cyber-cyan">HARDWARE GUIDE NPC</span>
+                </div>
+            </div>
+
+            <div id="npc-dialog-text" class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans min-h-[60px]">
+                ยินดีต้อนรับสู่ Cyber Town! กด WASD เพื่อเดินสำรวจและกด E เพื่อโต้ตอบ...
+            </div>
+
+            <div id="npc-dialog-options" class="flex flex-col gap-2">
+                <!-- Options -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 9. MODAL: COMBAT & PROCEDURAL Q&A ================= -->
+    <div id="modal-combat" class="fixed inset-0 bg-slate-950/95 z-50 flex items-center justify-center p-4 hidden">
+        <div class="max-w-2xl w-full bg-slate-900 border-2 border-cyber-cyan rounded-2xl p-5 shadow-2xl flex flex-col gap-4">
+            
+            <!-- Monster Header -->
+            <div class="flex items-center justify-between bg-slate-950 p-3 rounded-xl border border-slate-800">
+                <div class="flex items-center gap-3">
+                    <div id="combat-monster-icon" class="w-11 h-11 rounded-xl bg-red-950 border border-red-500 text-red-500 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-bug"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 id="combat-monster-name" class="text-sm sm:text-base font-bold text-red-400">CPU Overheat Bug</h3>
+                            <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-red-950 text-red-400 border border-red-800">HARDWARE THREAT</span>
+                        </div>
+                        <div class="w-36 sm:w-48 bg-slate-900 border border-slate-700 h-2 rounded-full mt-1 overflow-hidden">
+                            <div id="combat-monster-hp-bar" class="bg-red-500 h-full transition-all duration-200" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-right font-mono">
+                    <div class="text-[10px] text-slate-400">MONSTER HP</div>
+                    <div id="combat-monster-hp-text" class="text-xs sm:text-sm font-bold text-red-400">100 / 100</div>
+                </div>
+            </div>
+
+            <!-- Timer Bar -->
+            <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden border border-slate-800">
+                <div id="combat-timer-bar" class="bg-cyber-cyan h-full transition-all duration-100" style="width: 100%;"></div>
+            </div>
+
+            <!-- Question Box -->
+            <div class="bg-slate-950 p-3.5 rounded-xl border border-cyber-cyan/40">
+                <div class="flex justify-between items-center text-xs font-mono mb-2">
+                    <span id="combat-cat-badge" class="px-2 py-0.5 rounded bg-cyan-950 text-cyber-cyan border border-cyan-800">PROCEDURAL HARDWARE</span>
+                    <span id="combat-timer-text" class="text-cyber-cyan font-bold">15.0s</span>
+                </div>
+                <p id="combat-question-text" class="text-xs sm:text-sm font-semibold text-slate-100 leading-relaxed">
+                    คำถามสเปกอุปกรณ์คอมพิวเตอร์แบบไดนามิก...
+                </p>
+            </div>
+
+            <!-- Choices Grid -->
+            <div id="combat-choices-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <!-- Dynamic Choices -->
+            </div>
+
+            <!-- Post-Answer Explanation Drawer -->
+            <div id="combat-explanation" class="hidden bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-xs leading-relaxed space-y-2">
+                <div id="combat-exp-title" class="font-bold text-green-400 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-check"></i> COUNTER SUCCESSFUL!
+                </div>
+                <p id="combat-exp-body" class="text-slate-300 text-[11px] sm:text-xs"></p>
+                <button onclick="nextCombatTurn()" class="px-4 py-2 bg-cyber-cyan text-slate-950 font-bold rounded-lg font-mono text-xs hover:bg-cyan-300">
+                    ต่อไป <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= JAVASCRIPT GAME ENGINE ================= -->
+    <script>
+        /* ==========================================================================
+           1. WEB AUDIO SYNTHESIZER (FOOTSTEPS, COMBAT, UPGRADE SUCCESS/FAIL)
+           ========================================================================== */
+        const SoundFX = {
+            ctx: null,
+            init() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); },
+            playStep() {
+                if (!this.ctx) return;
+                const osc = this.ctx.createOscillator(), gain = this.ctx.createGain();
+                osc.type = 'sine'; osc.frequency.setValueAtTime(110, this.ctx.currentTime);
+                gain.gain.setValueAtTime(0.015, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.03);
+                osc.connect(gain); gain.connect(this.ctx.destination);
+                osc.start(); osc.stop(this.ctx.currentTime + 0.03);
+            },
+            playSlash() {
+                this.init();
+                const now = this.ctx.currentTime, osc = this.ctx.createOscillator(), gain = this.ctx.createGain();
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(420, now);
+                osc.frequency.exponentialRampToValueAtTime(80, now + 0.12);
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+                osc.connect(gain); gain.connect(this.ctx.destination);
+                osc.start(now); osc.stop(now + 0.12);
+            },
+            playCounter() {
+                this.init();
+                const now = this.ctx.currentTime, osc = this.ctx.createOscillator(), gain = this.ctx.createGain();
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(540, now);
+                osc.frequency.setValueAtTime(820, now + 0.08);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                osc.connect(gain); gain.connect(this.ctx.destination);
+                osc.start(now); osc.stop(now + 0.25);
+            },
+            playUpgradeSuccess() {
+                this.init();
+                const now = this.ctx.currentTime;
+                [440, 554.37, 659.25, 880].forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator(), gain = this.ctx.createGain();
+                    osc.type = 'triangle'; osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                    gain.gain.setValueAtTime(0.18, now + idx * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.25);
+                    osc.connect(gain); gain.connect(this.ctx.destination);
+                    osc.start(now + idx * 0.08); osc.stop(now + idx * 0.08 + 0.25);
+                });
+            },
+            playUpgradeFail() {
+                this.init();
+                const now = this.ctx.currentTime;
+                [300, 220, 150].forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator(), gain = this.ctx.createGain();
+                    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(freq, now + idx * 0.1);
+                    gain.gain.setValueAtTime(0.2, now + idx * 0.1);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.1 + 0.2);
+                    osc.connect(gain); gain.connect(this.ctx.destination);
+                    osc.start(now + idx * 0.1); osc.stop(now + idx * 0.1 + 0.2);
+                });
+            },
+            playDrop(rarity) {
+                this.init();
+                const now = this.ctx.currentTime;
+                const freqs = (rarity === 'mythic' || rarity === 'legendary') ? [523, 659, 783, 1046, 1318] : [880, 1100];
+                freqs.forEach((f, idx) => {
+                    const osc = this.ctx.createOscillator(), gain = this.ctx.createGain();
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(f, now + idx * 0.05);
+                    gain.gain.setValueAtTime(0.15, now + idx * 0.05);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.05 + 0.2);
+                    osc.connect(gain); gain.connect(this.ctx.destination);
+                    osc.start(now + idx * 0.05); osc.stop(now + idx * 0.05 + 0.2);
+                });
+            }
+        };
+
+        /* ==========================================================================
+           2. PROCEDURAL UNLIMITED QUESTION GENERATOR ENGINE
+           ========================================================================== */
+        const QuestionGenerator = {
+            generate() {
+                const types = [
+                    'ram_speed', 'cpu_cores', 'nvme_bandwidth', 
+                    'psu_wattage', 'gpu_vram', 'liquid_cooler', 
+                    'motherboard_chipset', 'display_port'
+                ];
+                const selectedType = types[Math.floor(Math.random() * types.length)];
+                return this[selectedType]();
+            },
+
+            ram_speed() {
+                const caps = [8, 16, 32, 64];
+                const speeds = [2666, 3200, 4800, 5600, 6000, 7200];
+                const cap = caps[Math.floor(Math.random() * caps.length)];
+                const speed = speeds[Math.floor(Math.random() * speeds.length)];
+                const gen = speed >= 4800 ? "DDR5" : "DDR4";
+                const bandwidth = Math.round((speed * 64) / 8); // MB/s single channel
+
+                const correct = `${bandwidth.toLocaleString()} MB/s`;
+                const options = [
+                    correct,
+                    `${Math.round(bandwidth * 1.5).toLocaleString()} MB/s`,
+                    `${Math.round(bandwidth * 0.5).toLocaleString()} MB/s`,
+                    `${Math.round(bandwidth * 2).toLocaleString()} MB/s`
+                ].sort(() => Math.random() - 0.5);
+
+                return {
+                    cat: `HARDWARE: ${gen} RAM`,
+                    q: `หน่วยความจำ RAM ${gen} ความจุ ${cap}GB มี Bus Speed ${speed} MHz... อัตราการส่งข้อมูลสูงสุดแบบ Single-Channel ตามทฤษฎีคือเท่าใด?`,
+                    options: options,
+                    ans: options.indexOf(correct),
+                    exp: `คำนวณจากสูตร: Bandwidth = (Bus Speed x 64 bits) / 8 = ${speed} x 8 = ${bandwidth.toLocaleString()} MB/s`
+                };
+            },
+
+            cpu_cores() {
+                const pCores = [4, 6, 8, 12, 16];
+                const eCores = [4, 8, 12, 16];
+                const p = pCores[Math.floor(Math.random() * pCores.length)];
+                const e = eCores[Math.floor(Math.random() * eCores.length)];
+                const totalCores = p + e;
+                const totalThreads = (p * 2) + e;
+
+                const correct = `${totalCores} Cores / ${totalThreads} Threads`;
+                const options = [
+                    correct,
+                    `${totalCores} Cores / ${totalCores * 2} Threads`,
+                    `${p * 2} Cores / ${totalThreads} Threads`,
+                    `${totalCores + 4} Cores / ${totalThreads + 4} Threads`
+                ].sort(() => Math.random() - 0.5);
+
+                return {
+                    cat: "HARDWARE: CPU ARCHITECTURE",
+                    q: `โปรเซสเซอร์สถาปัตยกรรมไฮบริด มี ${p} Performance-Cores (มี Hyper-Threading) และ ${e} Efficient-Cores (ไม่มี Hyper-Threading) จะมีจำนวน Cores และ Threads ทั้งหมดเท่าใด?`,
+                    options: options,
+                    ans: options.indexOf(correct),
+                    exp: `P-Cores มี 2 Threads ต่อ 1 Core (${p}x2 = ${p*2}) ส่วน E-Cores มี 1 Thread ต่อ Core (${e}) รวมเป็น ${totalCores} Cores / ${totalThreads} Threads`
+                };
+            },
+
+            nvme_bandwidth() {
+                const gens = [
+                    { gen: "PCIe 3.0 x4", max: 3500 },
+                    { gen: "PCIe 4.0 x4", max: 7500 },
+                    { gen: "PCIe 5.0 x4", max: 14000 }
+                ];
+                const choice = gens[Math.floor(Math.random() * gens.length)];
+                const correct = `ประมาณ ${choice.max.toLocaleString()} MB/s`;
+                const options = [
+                    correct,
+                    `ประมาณ ${(choice.max * 2).toLocaleString()} MB/s`,
+                    `ประมาณ 550 MB/s`,
+                    `ประมาณ ${(choice.max * 0.4).toLocaleString()} MB/s`
+                ].sort(() => Math.random() - 0.5);
+
+                return {
+                    cat: "HARDWARE: NVMe STORAGE",
+                    q: `SSD M.2 NVMe ที่เชื่อมต่อผ่านบัส ${choice.gen} มีความเร็วในการอ่านข้อมูลสูงสุดทางทฤษฎีอยู่ที่ประมาณเท่าใด?`,
+                    options: options,
+                    ans: options.indexOf(correct),
+                    exp: `${choice.gen} ส่งข้อมูลเลนละ ~1GB/s (Gen3), ~2GB/s (Gen4), ~4GB/s (Gen5) คูณ 4 เลน (x4) ได้สูงสุดประมาณ ${choice.max.toLocaleString()} MB/s`
+                };
+            },
+
+            psu_wattage() {
+                const gpuW = [200, 280, 350, 450][Math.floor(Math.random() * 4)];
+                const cpuW = [65, 105, 125, 253][Math.floor(Math.random() * 4)];
+                const otherW = 100;
+                const totalW = gpuW + cpuW + otherW;
+                const recommendedW = Math.ceil((totalW / 0.8) / 50) * 50;
+
+                const correct = `${recommendedW}W (80+ Gold)`;
+                const options = [
+                    correct,
+                    `${Math.floor(totalW / 50) * 50}W (80+ Standard)`,
+                    `${recommendedW + 300}W (Platinum)`,
+                    `450W Bronze`
+                ].sort(() => Math.random() - 0.5);
+
+                return {
+                    cat: "HARDWARE: POWER SUPPLY (PSU)",
+                    q: `ระบบคอมพิวเตอร์ใช้การ์ดจอ (${gpuW}W) + CPU (${cpuW}W) + อุปกรณ์อื่นๆ (${otherW}W) รวมใช้ไฟ ${totalW}W... ควรเลือก PSU ขนาดเท่าใดเพื่อให้โหลดอยู่ที่ประมาณ 80% Efficiency?`,
+                    options: options,
+                    ans: options.indexOf(correct),
+                    exp: `การคำนวณเผื่อ Peak Load และรักษาระดับ Peak Efficiency (50%-80% โหลด): ใช้ไฟรวม ${totalW}W / 0.8 = ${totalW / 0.8}W จึงควรเลือก PSU ขนาดอย่างน้อย ${recommendedW}W`
+                };
+            },
+
+            gpu_vram() {
+                const vrams = [8, 12, 16, 24];
+                const vram = vrams[Math.floor(Math.random() * vrams.length)];
+                const busBits = [128, 192, 256, 384][vrams.indexOf(vram)];
+                const correct = `เก็บ Texture/Frame Buffer ขนาดใหญ่ และโมเดล AI ในความจำการ์ดจอ`;
+                const options = [
+                    correct,
+                    `บันทึกไฟล์ระบบปฏิบัติการ Windows ลงการ์ดจอถาวร`,
+                    `เพิ่มความเร็วนาฬิกาให้แก่ CPU โดยตรง`,
+                    `ใช้แปลงไฟบ้าน AC เป็น DC ให้เมนบอร์ด`
+                ].sort(() => Math.random() - 0.5);
+
+                return {
+                    cat: "HARDWARE: GPU VRAM",
+                    q: `การ์ดจอระบุสเปก VRAM ${vram}GB GDDR6X ความกว้างบัส ${busBits}-bit... VRAM มีหน้าที่หลักคืออะไรในการประมวลผลกราฟิก?`,
+                    options: options,
+                    ans: options.indexOf(correct),
+                    exp: `VRAM (Video RAM) ทำหน้าที่เป็นหน่วยความจำความเร็วสูงของ GPU เพื่อเก็บข้อมูลฉาก Textures, 3D Buffers, Shaders และโมเดลประมวลผล`
+                };
+            },
+
+            liquid_cooler() {
+                const sizes = [120, 240, 360, 420];
+                const size = sizes[Math.floor(Math.random() * sizes.length)];
+                const fanCount = size / 120;
+                const correct = `${fanCount} ตัว (ขนาด 120mm)`;
+                const options = [
+                    correct,
+                    `${fanCount + 1} ตัว (ขนาด 140mm)`,
+                    `1 ตัว (ขนาด ${size}mm)`,
+                    `6 ตัว (ขนาด 80mm)`
+                ].sort(() => Math.random() - 0.5);
+
+                return {
+                    cat: "HARDWARE: COOLING",
+                    q: `ชุดน้ำปิดระบายความร้อน CPU (AIO Liquid Cooler) ขนาดหม้อน้ำ ${size}mm ต้องติดตั้งพัดลมระบายความร้อนขนาด 120mm ทั้งหมดกี่ตัว?`,
+                    options: options,
+                    ans: options.indexOf(correct),
+                    exp: `ขนาดหม้อน้ำ AIO คำนวณตามความยาวเรียงต่อกันของพัดลมมาตรฐาน 120mm: ${size}mm / 120mm = ${fanCount} ตัว`
+                };
+            },
+
+            motherboard_chipset() {
+                const chipsets = [
+                    { name: "Intel Z790 / Z890", brand: "Intel", tier: "Hi-End Overclocking" },
+                    { name: "Intel B760 / B860", brand: "Intel", tier: "Mainstream Standard" },
+                    { name: "AMD X670E / X870E", brand: "AMD", tier: "Extreme Enthusiast PCIe 5.0" },
+                    { name: "AMD B650 / B850", brand: "AMD", tier: "Mainstream Value" }
+                ];
+                const chip = chipsets[Math.floor(Math.random() * chipsets.length)];
+                const correct = `ค่าย ${chip.brand} (${chip.tier})`;
+                const options = [
+                    correct,
+                    `ค่าย ${chip.brand === 'Intel' ? 'AMD' : 'Intel'} (Low-End Server)`,
+                    `ค่าย ARM Mobile Chipset`,
+                    `ใช้ได้ทุกค่ายโดยไม่ต้องเปลี่ยน Socket`
+                ].sort(() => Math.random() - 0.5);
+
+                return {
+                    cat: "HARDWARE: MOTHERBOARD",
+                    q: `ชิปเซ็ตเมนบอร์ดรหัส "${chip.name}" ถูกออกแบบมาสำหรับ CPU ค่ายใด และอยู่ในระดับ (Tier) ใด?`,
+                    options: options,
+                    ans: options.indexOf(correct),
+                    exp: `ชิปเซ็ต ${chip.name} เป็นชิปเซ็ตสำหรับซีพียูค่าย ${chip.brand} ในระดับ ${chip.tier}`
+                };
+            },
+
+            display_port() {
+                const ports = [
+                    { name: "HDMI 2.1", cap: "4K @ 120Hz / 8K @ 60Hz (48 Gbps)" },
+                    { name: "DisplayPort 1.4", cap: "4K @ 144Hz / 8K @ 60Hz DSC (32.4 Gbps)" },
+                    { name: "DisplayPort 2.1", cap: "8K @ 165Hz / 4K @ 240Hz+ (80 Gbps)" }
+                ];
+                const p = ports[Math.floor(Math.random() * ports.length)];
+                const correct = p.cap;
+                const options = [
+                    correct,
+                    "Full HD 1080p @ 60Hz เท่านั้น",
+                    "รองรับเฉพาะสัญญาณเสียง Analog",
+                    "1080p @ 30Hz"
+                ].sort(() => Math.random() - 0.5);
+
+                return {
+                    cat: "HARDWARE: DISPLAY INTERFACE",
+                    q: `พอร์ตเชื่อมต่อแสดงผลมาตรฐาน "${p.name}" รองรับความละเอียดและความถี่รีเฟรชเรตสูงสุดระดับใด?`,
+                    options: options,
+                    ans: options.indexOf(correct),
+                    exp: `มาตรฐาน ${p.name} มีแบนด์วิธสูง ออกแบบมาเพื่อรองรับหน้าจอความละเอียดสูงและ Refresh Rate สำหรับเกมมิ่ง ${p.cap}`
+                };
+            }
+        };
+
+        /* ==========================================================================
+           3. PROCEDURAL UNLIMITED GEAR GENERATION ENGINE
+           ========================================================================== */
+        const GearGenerator = {
+            prefixes: ["Overclocked", "Liquid-Cooled", "Hyper-Threaded", "Superconductive", "Quantum", "Cybernetic", "Gold-Plated", "Binary", "Stealth", "Neon-Glowing"],
+            bases: {
+                weapon: ["GPU Blade", "SATA Saber", "Fiber Optic Spear", "Laser Soldering Gun", "Silicon Greatsword"],
+                helmet: ["CPU Cooler Visor", "Thermal Paste Mask", "VR Goggles", "Nanotech Core Helmet"],
+                armor: ["PSU Shield Plate", "Aluminum Chassis Armor", "Titanium PC Case Mail"],
+                boots: ["High-Bus RAM Greaves", "NVMe Speed Boots", "PCIe Express Striders"],
+                accessory: ["RGB LED Ring", "Gold Capacitor Ring", "CMOS Battery Amulet", "Quantum Qubit Relic"]
+            },
+            suffixes: ["of Speed", "of the Master Byte", "of Overvoltage", "of Zero Delay", "of Absolute Zero"],
+
+            rarityMultipliers: {
+                common: { mult: 1, color: "common", rate: 100.0, icon: "fa-cube" },
+                uncommon: { mult: 2.2, color: "uncommon", rate: 30.0, icon: "fa-memory" },
+                rare: { mult: 4.5, color: "rare", rate: 5.0, icon: "fa-hard-drive" },
+                epic: { mult: 9.0, color: "epic", rate: 0.5, icon: "fa-microchip" },
+                legendary: { mult: 20.0, color: "legendary", rate: 0.01, icon: "fa-atom" },
+                mythic: { mult: 60.0, color: "mythic", rate: 0.00000001, icon: "fa-wand-magic-sparkles" }
+            },
+
+            generate(forcedRarity = null) {
+                const slots = ['weapon', 'helmet', 'armor', 'boots', 'accessory'];
+                const slot = slots[Math.floor(Math.random() * slots.length)];
+
+                // Roll Rarity if not forced
+                let rarity = forcedRarity;
+                if (!rarity) {
+                    const rand = Math.random() * 100;
+                    if (rand < 0.00001) rarity = 'mythic';
+                    else if (rand < 0.02) rarity = 'legendary';
+                    else if (rand < 0.6) rarity = 'epic';
+                    else if (rand < 6.0) rarity = 'rare';
+                    else if (rand < 35.0) rarity = 'uncommon';
+                    else rarity = 'common';
+                }
+
+                const prefix = this.prefixes[Math.floor(Math.random() * this.prefixes.length)];
+                const baseList = this.bases[slot];
+                const base = baseList[Math.floor(Math.random() * baseList.length)];
+                const suffix = this.suffixes[Math.floor(Math.random() * this.suffixes.length)];
+
+                const name = `${prefix} ${base} ${suffix}`;
+                const rData = this.rarityMultipliers[rarity];
+
+                // Stats calculation
+                const baseVal = Math.floor((Math.random() * 8 + 5) * rData.mult);
+                const gear = {
+                    id: 'gear_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+                    name: name,
+                    slot: slot,
+                    rarity: rarity,
+                    upgradeLevel: 0,
+                    dropRate: rData.rate,
+                    icon: rData.icon,
+                    atk: slot === 'weapon' ? baseVal * 2 : (slot === 'accessory' ? Math.floor(baseVal * 0.8) : 0),
+                    def: slot === 'armor' ? baseVal * 2 : (slot === 'helmet' ? baseVal : 0),
+                    hp: slot === 'armor' ? baseVal * 8 : (slot === 'boots' ? baseVal * 5 : 0),
+                    crit: slot === 'weapon' || slot === 'boots' ? Math.floor(baseVal * 0.3) : 0
+                };
+                return gear;
+            }
+        };
+
+        /* ==========================================================================
+           4. PLAYER STATE & GAME DATA
+           ========================================================================== */
+        const player = {
+            name: "HardwareHero",
+            gender: "male",
+            jobClass: "knight",
+            colors: { hair: "#3b82f6", shirt: "#06b6d4" },
+            level: 1, exp: 0, maxExp: 100,
+            hp: 150, maxHp: 150,
+            baseAtk: 15, baseDef: 5, baseCrit: 5, speed: 180,
+            gold: 500, gems: 50,
+            x: 400, y: 300,
+            equipped: { weapon: null, helmet: null, armor: null, boots: null, accessory: null },
+            inventory: []
+        };
+
+        const classDefs = {
+            knight: { name: "Tech Knight", bonusHp: 50, bonusDef: 15, bonusAtk: 0 },
+            wizard: { name: "Overclock Wizard", bonusHp: 0, bonusDef: 0, bonusAtk: 25 },
+            ranger: { name: "Net Ranger", bonusHp: 20, bonusDef: 5, bonusAtk: 10 }
+        };
+
+        /* ==========================================================================
+           5. 2D CANVAS WORLD ENGINE
+           ========================================================================== */
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d', { alpha: false });
+
+        let currentMapKey = 'town';
+        const maps = {
+            town: {
+                name: "Central Tech Town (เมืองหลัก)", width: 1200, height: 800, color: "#060913",
+                buildings: [
+                    { x: 100, y: 80, w: 220, h: 120, color: "#1e1b4b", label: "HARDWARE ACADEMY" },
+                    { x: 700, y: 80, w: 240, h: 120, color: "#4c1d95", label: "FORGE TERMINAL 70%" }
+                ],
+                npcs: [
+                    { id: "npc_elder", name: "Elder Hardware Guide", role: "DAILY REWARDS", x: 210, y: 240, color: "#06b6d4" },
+                    { id: "npc_forge", name: "Master Forge Jack", role: "70% FORGE", x: 820, y: 240, color: "#a855f7" }
+                ],
+                portals: [
+                    { x: 1100, y: 350, w: 60, h: 90, target: "field", label: "TO SILICON FIELD ->" }
+                ],
+                monsters: []
+            },
+            field: {
+                name: "Silicon Field (ทุ่งหญ้าซิลิคอน - ฟาร์มไร้ขีดจำกัด)", width: 1400, height: 1000, color: "#022c22",
+                buildings: [], npcs: [],
+                portals: [
+                    { x: 40, y: 450, w: 60, h: 90, target: "town", label: "<- CENTRAL TOWN" }
+                ],
+                monsters: [
+                    { id: "m1", name: "CPU Overheat Bug", hp: 70, maxHp: 70, atk: 12, x: 350, y: 250, icon: "fa-bug", color: "#ef4444" },
+                    { id: "m2", name: "Static Electricity Demon", hp: 90, maxHp: 90, atk: 16, x: 750, y: 350, icon: "fa-bolt", color: "#eab308" },
+                    { id: "m3", name: "Thermal Paste Slime", hp: 120, maxHp: 120, atk: 14, x: 550, y: 700, icon: "fa-vial", color: "#10b981" }
+                ]
+            }
+        };
+
+        // Active key direction state dictionary
+        const activeKeys = { up: false, down: false, left: false, right: false };
+        let touchDpadDir = null;
+        let activeInteractTarget = null;
+        let lastTime = performance.now();
+
+        function isInputFocused() {
+            const active = document.activeElement;
+            return active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable);
+        }
+
+        function initInputListeners() {
+            window.addEventListener('keydown', e => {
+                if (isInputFocused()) return;
+
+                const code = e.code;
+                const key = e.key ? e.key.toLowerCase() : '';
+
+                // Movement directions (Supports physical code + English & Thai keys)
+                if (code === 'KeyW' || code === 'ArrowUp' || key === 'w' || key === 'ไ') {
+                    activeKeys.up = true;
+                    e.preventDefault();
+                }
+                if (code === 'KeyS' || code === 'ArrowDown' || key === 's' || key === 'ห') {
+                    activeKeys.down = true;
+                    e.preventDefault();
+                }
+                if (code === 'KeyA' || code === 'ArrowLeft' || key === 'a' || key === 'ฟ') {
+                    activeKeys.left = true;
+                    e.preventDefault();
+                }
+                if (code === 'KeyD' || code === 'ArrowRight' || key === 'd' || key === 'ก') {
+                    activeKeys.right = true;
+                    e.preventDefault();
+                }
+
+                // Interact key (Supports E, Spacebar, ำ)
+                if (code === 'KeyE' || code === 'Space' || key === 'e' || key === 'ำ') {
+                    e.preventDefault();
+                    triggerCurrentInteraction();
+                }
+            });
+
+            window.addEventListener('keyup', e => {
+                if (isInputFocused()) return;
+
+                const code = e.code;
+                const key = e.key ? e.key.toLowerCase() : '';
+
+                if (code === 'KeyW' || code === 'ArrowUp' || key === 'w' || key === 'ไ') activeKeys.up = false;
+                if (code === 'KeyS' || code === 'ArrowDown' || key === 's' || key === 'ห') activeKeys.down = false;
+                if (code === 'KeyA' || code === 'ArrowLeft' || key === 'a' || key === 'ฟ') activeKeys.left = false;
+                if (code === 'KeyD' || code === 'ArrowRight' || key === 'd' || key === 'ก') activeKeys.right = false;
+            });
+
+            // Safeguard: Reset keys when window loses focus
+            window.addEventListener('blur', () => {
+                activeKeys.up = false;
+                activeKeys.down = false;
+                activeKeys.left = false;
+                activeKeys.right = false;
+            });
+
+            canvas.addEventListener('click', e => {
+                window.focus();
+                const rect = canvas.getBoundingClientRect();
+                player.x = e.clientX - rect.left;
+                player.y = e.clientY - rect.top;
+            });
+        }
+
+        function startEngine() {
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            initInputListeners();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+        }
+
+        function gameLoop(now) {
+            const dt = Math.min(0.05, (now - lastTime) / 1000);
+            lastTime = now;
+
+            updatePlayerPhysics(dt);
+            renderCanvasWorld();
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        function updatePlayerPhysics(dt) {
+            let dx = 0, dy = 0;
+            if (activeKeys.up || touchDpadDir === 'up') dy -= 1;
+            if (activeKeys.down || touchDpadDir === 'down') dy += 1;
+            if (activeKeys.left || touchDpadDir === 'left') dx -= 1;
+            if (activeKeys.right || touchDpadDir === 'right') dx += 1;
+
+            if (dx !== 0 || dy !== 0) {
+                const len = Math.sqrt(dx * dx + dy * dy);
+                const speed = player.speed * (player.jobClass === 'ranger' ? 1.25 : 1.0);
+                player.x += (dx / len) * speed * dt;
+                player.y += (dy / len) * speed * dt;
+
+                const curMap = maps[currentMapKey];
+                player.x = Math.max(20, Math.min(curMap.width - 20, player.x));
+                player.y = Math.max(20, Math.min(curMap.height - 20, player.y));
+
+                if (Math.random() < 0.05) SoundFX.playStep();
+            }
+
+            checkProximity();
+        }
+
+        function checkProximity() {
+            const curMap = maps[currentMapKey];
+            activeInteractTarget = null;
+
+            curMap.portals.forEach(p => {
+                if (Math.hypot(player.x - (p.x + p.w / 2), player.y - (p.y + p.h / 2)) < 40) {
+                    currentMapKey = p.target;
+                    player.x = 100; player.y = 450;
+                    document.getElementById('hud-map-name').innerText = maps[currentMapKey].name;
+                }
+            });
+
+            curMap.npcs.forEach(npc => {
+                if (Math.hypot(player.x - npc.x, player.y - npc.y) < 45) {
+                    activeInteractTarget = { type: 'npc', data: npc };
+                }
+            });
+
+            curMap.monsters.forEach(m => {
+                if (Math.hypot(player.x - m.x, player.y - m.y) < 35) {
+                    activeInteractTarget = { type: 'monster', data: m };
+                }
+            });
+
+            const prompt = document.getElementById('interact-prompt');
+            if (activeInteractTarget) {
+                document.getElementById('interact-prompt-text').innerText = `กด [E] หรือแตะ เพื่อโต้ตอบกับ ${activeInteractTarget.data.name}`;
+                prompt.classList.remove('hidden');
+            } else {
+                prompt.classList.add('hidden');
+            }
+        }
+
+        function triggerCurrentInteraction() {
+            if (!activeInteractTarget) return;
+            if (activeInteractTarget.type === 'npc') openNpcDialog(activeInteractTarget.data);
+            else if (activeInteractTarget.type === 'monster') startCombat(activeInteractTarget.data);
+        }
+
+        function renderCanvasWorld() {
+            const curMap = maps[currentMapKey];
+            ctx.fillStyle = curMap.color;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Subtle Grid
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.04)";
+            ctx.lineWidth = 1;
+            for (let x = 0; x < canvas.width; x += 60) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+            }
+            for (let y = 0; y < canvas.height; y += 60) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+            }
+
+            // Buildings
+            curMap.buildings.forEach(b => {
+                ctx.fillStyle = b.color; ctx.fillRect(b.x, b.y, b.w, b.h);
+                ctx.strokeStyle = "#a855f7"; ctx.strokeRect(b.x, b.y, b.w, b.h);
+                ctx.fillStyle = "#ffffff"; ctx.font = "10px Share Tech Mono"; ctx.fillText(b.label, b.x + 8, b.y + 20);
+            });
+
+            // Portals
+            curMap.portals.forEach(p => {
+                ctx.fillStyle = "rgba(6, 182, 212, 0.3)"; ctx.fillRect(p.x, p.y, p.w, p.h);
+                ctx.strokeStyle = "#06b6d4"; ctx.strokeRect(p.x, p.y, p.w, p.h);
+                ctx.fillStyle = "#06b6d4"; ctx.font = "10px Kanit"; ctx.fillText(p.label, p.x - 10, p.y - 6);
+            });
+
+            // NPCs
+            curMap.npcs.forEach(npc => {
+                ctx.fillStyle = npc.color; ctx.beginPath(); ctx.arc(npc.x, npc.y, 14, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = "#ffffff"; ctx.font = "bold 10px Kanit"; ctx.textAlign = "center"; ctx.fillText(npc.name, npc.x, npc.y - 18);
+            });
+
+            // Monsters
+            curMap.monsters.forEach(m => {
+                ctx.fillStyle = m.color; ctx.beginPath(); ctx.arc(m.x, m.y, 14, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = "#ffffff"; ctx.font = "bold 10px Kanit"; ctx.textAlign = "center"; ctx.fillText(m.name, m.x, m.y - 18);
+            });
+
+            // Player Avatar
+            drawHumanAvatar(ctx, player.x, player.y, player.gender, player.colors);
+
+            // Name Tag
+            ctx.fillStyle = "#fde047"; ctx.font = "bold 11px Share Tech Mono"; ctx.textAlign = "center";
+            ctx.fillText(`${player.name} [E]`, player.x, player.y - 30);
+        }
+
+        function drawHumanAvatar(cCtx, cx, cy, gender, colors) {
+            cCtx.save();
+            cCtx.translate(cx, cy);
+
+            cCtx.fillStyle = colors.shirt || "#06b6d4";
+            cCtx.fillRect(-8, -8, 16, 14);
+
+            cCtx.fillStyle = "#fcd34d";
+            cCtx.beginPath(); cCtx.arc(0, -15, 9, 0, Math.PI * 2); cCtx.fill();
+
+            cCtx.fillStyle = "#0f172a";
+            cCtx.fillRect(-3, -16, 2, 3); cCtx.fillRect(2, -16, 2, 3);
+
+            cCtx.fillStyle = colors.hair || "#3b82f6";
+            if (gender === 'female') {
+                cCtx.beginPath(); cCtx.arc(0, -18, 10, Math.PI, Math.PI * 2); cCtx.fill();
+                cCtx.fillRect(-10, -18, 4, 16); cCtx.fillRect(6, -18, 4, 16);
+            } else {
+                cCtx.beginPath(); cCtx.arc(0, -17, 10, Math.PI * 0.8, Math.PI * 2.2); cCtx.fill();
+            }
+            cCtx.restore();
+        }
+
+        /* ==========================================================================
+           6. CHARACTER CREATION & HUD
+           ========================================================================== */
+        let createGender = 'male';
+        let createClass = 'knight';
+
+        function selectGender(g) {
+            createGender = g;
+            document.querySelectorAll('.gender-btn').forEach(b => b.className = 'gender-btn py-2.5 rounded-xl border bg-slate-950 flex items-center justify-center gap-2 border-slate-800 text-slate-400 font-bold text-xs transition-all');
+            document.getElementById(`gender-btn-${g}`).className = 'gender-btn active py-2.5 rounded-xl border bg-slate-950 flex items-center justify-center gap-2 border-cyber-cyan text-cyber-cyan font-bold text-xs transition-all';
+            updatePreviewCanvas();
+        }
+
+        function selectClass(c) {
+            createClass = c;
+            document.querySelectorAll('.class-btn').forEach(b => b.className = 'class-btn p-2 rounded-xl border bg-slate-950 text-center border-slate-800 text-slate-400 transition-all');
+            document.getElementById(`class-btn-${c}`).className = 'class-btn active p-2 rounded-xl border bg-slate-950 text-center border-cyber-cyan text-cyber-cyan transition-all';
+        }
+
+        function setPreviewColor(type, hex) {
+            player.colors[type] = hex;
+            updatePreviewCanvas();
+        }
+
+        function updatePreviewCanvas() {
+            const pCanvas = document.getElementById('canvas-preview');
+            const pCtx = pCanvas.getContext('2d');
+            pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+            drawHumanAvatar(pCtx, pCanvas.width / 2, pCanvas.height / 2 + 10, createGender, player.colors);
+        }
+
+        function confirmCharacterCreation() {
+            player.name = document.getElementById('create-name').value.trim() || "HardwareHero";
+            player.gender = createGender;
+            player.jobClass = createClass;
+
+            const cData = classDefs[createClass];
+            player.maxHp += cData.bonusHp; player.hp = player.maxHp;
+            player.baseDef += cData.bonusDef; player.baseAtk += cData.bonusAtk;
+
+            // Starter Gear
+            const starterWeapon = GearGenerator.generate('common');
+            player.inventory.push(starterWeapon);
+
+            document.getElementById('hud-name').innerText = player.name;
+            document.getElementById('hud-class-badge').innerText = cData.name;
+            document.getElementById('hud-gender-icon').innerHTML = `<i class="fa-solid ${player.gender === 'female' ? 'fa-venus' : 'fa-mars'}"></i>`;
+
+            document.getElementById('screen-char-create').classList.add('hidden');
+            updatePlayerHud();
+            startEngine();
+        }
+
+        function updatePlayerHud() {
+            const maxHp = getEffectiveMaxHp();
+            document.getElementById('hud-level').innerText = player.level;
+            document.getElementById('hud-gold').innerText = player.gold;
+            document.getElementById('hud-gems').innerText = player.gems;
+            document.getElementById('hud-hp-val').innerText = `${player.hp}/${maxHp}`;
+            document.getElementById('hud-hp-bar').style.width = `${Math.max(0, (player.hp / maxHp) * 100)}%`;
+        }
+
+        /* ==========================================================================
+           7. DAILY LOGIN REWARD SYSTEM (1 TIME PER DAY)
+           ========================================================================== */
+        function getTodayString() {
+            const now = new Date();
+            return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+        }
+
+        function openDailyLoginModal() {
+            const lastClaim = localStorage.getItem('cyber_daily_claim_date');
+            const todayStr = getTodayString();
+            const statusBox = document.getElementById('daily-login-status-box');
+
+            if (lastClaim === todayStr) {
+                statusBox.innerHTML = `
+                    <button disabled class="w-full py-3 bg-slate-800 text-slate-500 font-bold rounded-xl font-mono text-xs cursor-not-allowed">
+                        <i class="fa-solid fa-check-circle mr-1"></i> รับรางวัลของวันนี้เรียบร้อยแล้ว (กลับมารับใหม่พรุ่งนี้)
+                    </button>
+                `;
+            } else {
+                statusBox.innerHTML = `
+                    <button onclick="claimDailyReward()" class="w-full py-3 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-bold rounded-xl font-mono text-xs transition-all shadow-lg flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-gift text-sm"></i> กดรับรางวัลเข้าเล่นประจำวัน!
+                    </button>
+                `;
+            }
+            document.getElementById('modal-daily-login').classList.remove('hidden');
+        }
+
+        function closeDailyLoginModal() { document.getElementById('modal-daily-login').classList.add('hidden'); }
+
+        function claimDailyReward() {
+            const todayStr = getTodayString();
+            localStorage.setItem('cyber_daily_claim_date', todayStr);
+
+            player.gold += 500;
+            player.gems += 50;
+            const rewardGear = GearGenerator.generate('rare');
+            player.inventory.push(rewardGear);
+
+            SoundFX.playUpgradeSuccess();
+            triggerLootDropBanner(rewardGear);
+            updatePlayerHud();
+            openDailyLoginModal();
+        }
+
+        /* ==========================================================================
+           8. FORGE & UPGRADE SYSTEM (70% SUCCESS RATE)
+           ========================================================================== */
+        let selectedForgeItem = null;
+
+        function openForgeModal() {
+            selectedForgeItem = null;
+            renderForgeInventory();
+            renderForgeTarget();
+            document.getElementById('modal-forge').classList.remove('hidden');
+        }
+
+        function closeForgeModal() { document.getElementById('modal-forge').classList.add('hidden'); }
+
+        function renderForgeInventory() {
+            const list = document.getElementById('forge-inventory-list');
+            list.innerHTML = '';
+
+            const allItems = [...player.inventory];
+            Object.values(player.equipped).forEach(e => { if (e) allItems.push(e); });
+
+            allItems.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = `w-full p-2 rounded-lg border bg-slate-900 flex items-center justify-between text-xs font-mono rarity-${item.rarity} hover:border-purple-400`;
+                btn.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid ${item.icon}"></i>
+                        <span class="font-bold">${item.name} ${item.upgradeLevel > 0 ? '+' + item.upgradeLevel : ''}</span>
+                    </div>
+                    <span class="text-[9px] uppercase px-1.5 py-0.5 rounded bg-rarity-${item.rarity}">${item.rarity}</span>
+                `;
+                btn.onclick = () => {
+                    selectedForgeItem = item;
+                    renderForgeTarget();
+                };
+                list.appendChild(btn);
+            });
+        }
+
+        function renderForgeTarget() {
+            const targetCard = document.getElementById('forge-target-card');
+            const execBtn = document.getElementById('btn-execute-forge');
+
+            if (!selectedForgeItem) {
+                targetCard.innerHTML = `
+                    <div class="w-16 h-16 rounded-2xl bg-slate-900 border-2 border-slate-700 flex items-center justify-center text-3xl text-slate-500">
+                        <i class="fa-solid fa-anvil"></i>
+                    </div>
+                    <span class="text-xs font-mono text-slate-400">ยังไม่ได้เลือกไอเท็ม</span>
+                `;
+                execBtn.disabled = true;
+                return;
+            }
+
+            const item = selectedForgeItem;
+            const cost = (item.upgradeLevel + 1) * 100;
+            document.getElementById('forge-cost-text').innerText = `${cost} GOLD`;
+
+            targetCard.innerHTML = `
+                <div class="w-16 h-16 rounded-2xl bg-slate-900 border-2 rarity-${item.rarity} flex items-center justify-center text-3xl text-purple-400 glow-active">
+                    <i class="fa-solid ${item.icon}"></i>
+                </div>
+                <div class="font-bold text-sm text-slate-100 font-mono mt-1">${item.name} ${item.upgradeLevel > 0 ? '+' + item.upgradeLevel : ''}</div>
+                <div class="text-xs text-yellow-400 font-mono">เพิ่มพลังเป็นระดับ +${item.upgradeLevel + 1} (+25% Stats)</div>
+            `;
+            execBtn.disabled = player.gold < cost;
+        }
+
+        function executeForgeUpgrade() {
+            if (!selectedForgeItem) return;
+            const cost = (selectedForgeItem.upgradeLevel + 1) * 100;
+            if (player.gold < cost) return;
+
+            player.gold -= cost;
+            const isSuccess = Math.random() < 0.70; // 70% Success Rate
+
+            if (isSuccess) {
+                selectedForgeItem.upgradeLevel += 1;
+                selectedForgeItem.atk = Math.floor(selectedForgeItem.atk * 1.25);
+                selectedForgeItem.def = Math.floor(selectedForgeItem.def * 1.25);
+                selectedForgeItem.hp = Math.floor(selectedForgeItem.hp * 1.25);
+
+                SoundFX.playUpgradeSuccess();
+                alert(`[ตีบวกสำเร็จ!] ${selectedForgeItem.name} เพิ่มระดับเป็น +${selectedForgeItem.upgradeLevel} (+25% Stats!)`);
+            } else {
+                SoundFX.playUpgradeFail();
+                document.getElementById('app-body').classList.add('shake-screen');
+                setTimeout(() => document.getElementById('app-body').classList.remove('shake-screen'), 250);
+                alert(`[ตีบวกล้มเหลว!] (โอกาสสำเร็จ 70%) ไอเท็มปลอดภัยแต่เสียวัตถุดิบและทอง`);
+            }
+
+            updatePlayerHud();
+            renderForgeInventory();
+            renderForgeTarget();
+            renderEquippedSlots();
+        }
+
+        /* ==========================================================================
+           9. INVENTORY & 5-SLOT EQUIPMENT MANAGER
+           ========================================================================== */
+        function openInventoryModal() {
+            renderEquippedSlots();
+            renderInventoryGrid();
+            document.getElementById('modal-inventory').classList.remove('hidden');
+        }
+
+        function closeInventoryModal() { document.getElementById('modal-inventory').classList.add('hidden'); }
+
+        function renderEquippedSlots() {
+            ['weapon', 'helmet', 'armor', 'boots', 'accessory'].forEach(slot => {
+                const eq = player.equipped[slot];
+                const nameEl = document.getElementById(`slot-${slot}-name`);
+                if (eq) {
+                    nameEl.innerText = `${eq.name} ${eq.upgradeLevel > 0 ? '+' + eq.upgradeLevel : ''}`;
+                    nameEl.className = `font-semibold text-[10px] truncate rarity-${eq.rarity}`;
+                } else {
+                    nameEl.innerText = "ว่างเปล่า";
+                    nameEl.className = "font-semibold text-slate-500 text-[10px]";
+                }
+            });
+
+            document.getElementById('stat-total-atk').innerText = getEffectiveAtk();
+            document.getElementById('stat-total-def').innerText = getEffectiveDef();
+            document.getElementById('stat-total-hp').innerText = getEffectiveMaxHp();
+            document.getElementById('stat-total-crit').innerText = `${getEffectiveCrit()}%`;
+        }
+
+        function renderInventoryGrid() {
+            const grid = document.getElementById('inventory-grid');
+            grid.innerHTML = '';
+
+            player.inventory.forEach(item => {
+                const box = document.createElement('div');
+                box.className = `aspect-square rounded-lg border bg-slate-900 flex flex-col items-center justify-center p-1 cursor-pointer hover:scale-105 transition-all rarity-${item.rarity}`;
+                box.innerHTML = `
+                    <i class="fa-solid ${item.icon} text-base mb-1"></i>
+                    <span class="text-[8px] font-bold text-center truncate w-full">${item.name} ${item.upgradeLevel > 0 ? '+' + item.upgradeLevel : ''}</span>
+                `;
+                box.onclick = () => selectInvItem(item);
+                grid.appendChild(box);
+            });
+        }
+
+        function selectInvItem(item) {
+            const detail = document.getElementById('inventory-item-detail');
+            detail.classList.remove('hidden');
+            document.getElementById('inv-item-name').innerText = `${item.name} ${item.upgradeLevel > 0 ? '+' + item.upgradeLevel : ''}`;
+            document.getElementById('inv-item-rarity').innerText = item.rarity;
+            document.getElementById('inv-item-rarity').className = `text-[9px] font-mono px-2 py-0.5 rounded font-bold uppercase bg-rarity-${item.rarity}`;
+            document.getElementById('inv-item-stats').innerText = `ATK: +${item.atk || 0} | DEF: +${item.def || 0} | HP: +${item.hp || 0} | CRIT: +${item.crit || 0}%`;
+
+            document.getElementById('btn-equip-item').onclick = () => {
+                if (player.equipped[item.slot]) player.inventory.push(player.equipped[item.slot]);
+                player.equipped[item.slot] = item;
+                player.inventory = player.inventory.filter(i => i.id !== item.id);
+                detail.classList.add('hidden');
+                renderEquippedSlots();
+                renderInventoryGrid();
+                updatePlayerHud();
+            };
+
+            document.getElementById('btn-sell-item').onclick = () => {
+                player.gold += 50;
+                player.inventory = player.inventory.filter(i => i.id !== item.id);
+                detail.classList.add('hidden');
+                renderInventoryGrid();
+                updatePlayerHud();
+            };
+        }
+
+        function unequipSlot(slot) {
+            if (player.equipped[slot]) {
+                player.inventory.push(player.equipped[slot]);
+                player.equipped[slot] = null;
+                renderEquippedSlots();
+                renderInventoryGrid();
+                updatePlayerHud();
+            }
+        }
+
+        function getEffectiveAtk() {
+            let b = 0; Object.values(player.equipped).forEach(e => { if(e) b += (e.atk||0); });
+            return player.baseAtk + b;
+        }
+        function getEffectiveDef() {
+            let b = 0; Object.values(player.equipped).forEach(e => { if(e) b += (e.def||0); });
+            return player.baseDef + b;
+        }
+        function getEffectiveMaxHp() {
+            let b = 0; Object.values(player.equipped).forEach(e => { if(e) b += (e.hp||0); });
+            return player.maxHp + b;
+        }
+        function getEffectiveCrit() {
+            let b = 0; Object.values(player.equipped).forEach(e => { if(e) b += (e.crit||0); });
+            return player.baseCrit + b;
+        }
+
+        /* ==========================================================================
+           10. COMBAT & INFINITE MONSTER FARMING
+           ========================================================================== */
+        let currentMonster = null;
+        let currentQuestion = null;
+        let combatTimer = null;
+        let combatTimeLeft = 15;
+
+        function startCombat(monster) {
+            currentMonster = monster;
+            document.getElementById('combat-monster-name').innerText = monster.name;
+            document.getElementById('combat-monster-icon').className = `fa-solid ${monster.icon}`;
+            updateCombatMonsterHp();
+            document.getElementById('modal-combat').classList.remove('hidden');
+            loadCombatQuestion();
+        }
+
+        function updateCombatMonsterHp() {
+            const pct = Math.max(0, (currentMonster.hp / currentMonster.maxHp) * 100);
+            document.getElementById('combat-monster-hp-bar').style.width = `${pct}%`;
+            document.getElementById('combat-monster-hp-text').innerText = `${currentMonster.hp} / ${currentMonster.maxHp}`;
+        }
+
+        function loadCombatQuestion() {
+            document.getElementById('combat-explanation').classList.add('hidden');
+            currentQuestion = QuestionGenerator.generate(); // Unlimited Procedural Question
+
+            document.getElementById('combat-cat-badge').innerText = currentQuestion.cat;
+            document.getElementById('combat-question-text').innerText = currentQuestion.q;
+
+            const grid = document.getElementById('combat-choices-grid');
+            grid.innerHTML = '';
+            grid.classList.remove('pointer-events-none');
+
+            currentQuestion.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = "p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-left hover:border-cyber-cyan text-xs font-medium text-slate-200 transition-all flex items-center gap-2";
+                btn.innerHTML = `<span class="w-4 h-4 rounded bg-slate-900 border border-slate-700 text-cyber-cyan font-mono flex items-center justify-center font-bold text-[9px]">${i+1}</span> <span>${opt}</span>`;
+                btn.onclick = () => submitCombatAnswer(i);
+                grid.appendChild(btn);
+            });
+
+            clearInterval(combatTimer);
+            combatTimeLeft = 15;
+            updateCombatTimerBar();
+            combatTimer = setInterval(() => {
+                combatTimeLeft -= 0.1;
+                updateCombatTimerBar();
+                if (combatTimeLeft <= 0) {
+                    clearInterval(combatTimer);
+                    submitCombatAnswer(-1);
+                }
+            }, 100);
+        }
+
+        function updateCombatTimerBar() {
+            const pct = Math.max(0, (combatTimeLeft / 15) * 100);
+            document.getElementById('combat-timer-bar').style.width = `${pct}%`;
+            document.getElementById('combat-timer-text').innerText = `${Math.max(0, combatTimeLeft).toFixed(1)}s`;
+        }
+
+        function submitCombatAnswer(chosenIdx) {
+            clearInterval(combatTimer);
+            document.getElementById('combat-choices-grid').classList.add('pointer-events-none');
+            const isCorrect = (chosenIdx === currentQuestion.ans);
+
+            if (isCorrect) {
+                SoundFX.playSlash();
+                const isCrit = Math.random() * 100 < getEffectiveCrit();
+                let dmg = Math.floor(getEffectiveAtk() * (isCrit ? 2.0 : 1.3));
+                currentMonster.hp = Math.max(0, currentMonster.hp - dmg);
+                updateCombatMonsterHp();
+
+                document.getElementById('combat-exp-title').className = "font-bold text-green-400 flex items-center gap-2";
+                document.getElementById('combat-exp-title').innerHTML = `<i class="fa-solid fa-circle-check"></i> COUNTER SUCCESSFUL! (${isCrit ? 'CRITICAL ' : ''}${dmg} ดาเมจ)`;
+            } else {
+                SoundFX.playCounter();
+                document.getElementById('app-body').classList.add('shake-screen');
+                setTimeout(() => document.getElementById('app-body').classList.remove('shake-screen'), 250);
+
+                const dmg = Math.max(8, currentMonster.atk - getEffectiveDef());
+                player.hp = Math.max(0, player.hp - dmg);
+                updatePlayerHud();
+
+                document.getElementById('combat-exp-title').className = "font-bold text-red-400 flex items-center gap-2";
+                document.getElementById('combat-exp-title').innerHTML = `<i class="fa-solid fa-circle-xmark"></i> COUNTER FAILED! (โดนโจมตี ${dmg} ดาเมจ)`;
+            }
+
+            document.getElementById('combat-exp-body').innerText = currentQuestion.exp;
+            document.getElementById('combat-explanation').classList.remove('hidden');
+        }
+
+        function nextCombatTurn() {
+            if (currentMonster.hp <= 0) {
+                player.exp += 45;
+                player.gold += 50;
+
+                // Procedural Gear Drop Roll
+                const droppedGear = GearGenerator.generate();
+                player.inventory.push(droppedGear);
+                SoundFX.playDrop(droppedGear.rarity);
+                triggerLootDropBanner(droppedGear);
+
+                if (player.exp >= player.maxExp) {
+                    player.level += 1;
+                    player.exp -= player.maxExp;
+                    player.maxExp = Math.floor(player.maxExp * 1.35);
+                    player.maxHp += 25;
+                    player.hp = getEffectiveMaxHp();
+                }
+
+                updatePlayerHud();
+
+                // Respawn monster
+                const respawnM = currentMonster;
+                maps[currentMapKey].monsters = maps[currentMapKey].monsters.filter(m => m.id !== currentMonster.id);
+                setTimeout(() => {
+                    respawnM.hp = respawnM.maxHp;
+                    respawnM.x = Math.floor(Math.random() * (maps[currentMapKey].width - 200)) + 100;
+                    respawnM.y = Math.floor(Math.random() * (maps[currentMapKey].height - 200)) + 100;
+                    maps[currentMapKey].monsters.push(respawnM);
+                }, 3000);
+
+                document.getElementById('modal-combat').classList.add('hidden');
+            } else if (player.hp <= 0) {
+                player.hp = getEffectiveMaxHp();
+                currentMapKey = 'town';
+                player.x = 400; player.y = 300;
+                updatePlayerHud();
+                document.getElementById('modal-combat').classList.add('hidden');
+            } else {
+                loadCombatQuestion();
+            }
+        }
+
+        function triggerLootDropBanner(item) {
+            const banner = document.getElementById('loot-drop-banner');
+            const card = document.getElementById('loot-drop-card');
+            const iconBox = document.getElementById('loot-drop-icon-box');
+
+            card.className = `bg-slate-900 border-2 px-4 py-2 rounded-xl flex items-center gap-3 rarity-${item.rarity}`;
+            iconBox.className = `w-9 h-9 rounded-lg flex items-center justify-center text-lg bg-rarity-${item.rarity}`;
+            document.getElementById('loot-drop-icon').className = `fa-solid ${item.icon}`;
+            document.getElementById('loot-drop-rarity-text').innerText = `${item.rarity} DROP!`;
+            document.getElementById('loot-drop-name-text').innerText = item.name;
+            document.getElementById('loot-drop-rate-text').innerText = `อัตราดรอป: ${item.dropRate}%`;
+
+            banner.classList.remove('hidden');
+            setTimeout(() => banner.classList.add('hidden'), 3000);
+        }
+
+        /* ==========================================================================
+           11. NPC DIALOGS & LEADERBOARD
+           ========================================================================== */
+        function openNpcDialog(npc) {
+            const modal = document.getElementById('modal-npc-dialog');
+            document.getElementById('npc-dialog-title').innerText = npc.name;
+            document.getElementById('npc-dialog-role').innerText = npc.role;
+            const textEl = document.getElementById('npc-dialog-text');
+            const optsEl = document.getElementById('npc-dialog-options');
+            optsEl.innerHTML = '';
+
+            if (npc.id === 'npc_elder') {
+                textEl.innerText = `สวัสดี ${player.name}! อย่าลืมกดรับ "รางวัลประจำวัน" และใช้ WASD ในการเดินเข้าทุ่งหญ้าเพื่อฟาร์มมอนสเตอร์ตอบคำถามฮาร์ดแวร์แบบไม่จำกัด!`;
+                optsEl.innerHTML = `
+                    <button onclick="closeNpcDialog(); openDailyLoginModal();" class="w-full py-2 bg-yellow-500 text-slate-950 font-bold rounded-lg text-xs font-mono">เปิดหน้าต่างรางวัลรายวัน</button>
+                    <button onclick="closeNpcDialog()" class="w-full py-2 bg-slate-800 text-slate-300 rounded-lg text-xs font-mono">ปิด</button>
+                `;
+            } else if (npc.id === 'npc_forge') {
+                closeNpcDialog();
+                openForgeModal();
+                return;
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeNpcDialog() { document.getElementById('modal-npc-dialog').classList.add('hidden'); }
+
+        function openRankingModal() {
+            const list = document.getElementById('ranking-list');
+            list.innerHTML = `
+                <div class="p-2.5 bg-slate-950 border border-slate-800 rounded-xl flex justify-between items-center text-xs font-mono">
+                    <div class="flex items-center gap-3">
+                        <span class="font-bold text-yellow-400">#1</span>
+                        <span class="font-bold text-slate-100">${player.name}</span>
+                    </div>
+                    <div class="text-cyber-cyan font-bold">LV.${player.level} (${player.gold} GOLD)</div>
+                </div>
+            `;
+            document.getElementById('modal-ranking').classList.remove('hidden');
+        }
+
+        function closeRankingModal() { document.getElementById('modal-ranking').classList.add('hidden'); }
+
+        function handleDpadStart(dir) { touchDpadDir = dir; }
+        function handleDpadEnd() { touchDpadDir = null; }
+
+        window.onload = function() {
+            selectGender('male');
+            selectClass('knight');
+            updatePreviewCanvas();
+        };
+    </script>
+</body>
+</html>
