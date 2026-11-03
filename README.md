@@ -1,4 +1,4 @@
-เกม RPG เสริมความรู้ด้านคอมพิวเตอร์
+**เกม RPG เสริมความรู้ด้านคอมพิวเตอร์**
 ⚡ Cyber Quest 2D: Unlimited Hardware Farming & Forge Edition
 
 Cyber Quest 2D คือเกม RPG เพื่อการศึกษาเรื่องระบบและอุปกรณ์คอมพิวเตอร์ (Computer Hardware & Architecture) บนเว็บเบราว์เซอร์ในรูปแบบ Single-File Web Application (HTML5 Canvas + Web Audio API) รองรับการฟาร์มมอนสเตอร์แบบ Infinite ไม่จำกัดด่าน พร้อมระบบตีบวกไอเท็ม คลังคำถามสร้างแบบสุ่มไดนามิก และระบบสุ่มดรอปไอเท็มที่มีความละเอียดสูง
